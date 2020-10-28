@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- using boot straps for 'center' forms: -->
+    <h1 class="justify-content-center">Official Avengers Phonebook</h1>
+    <div class="justify-content-center">
+        <form method="POST">
+            <!-- this curly bace portion was added after the rest of the bootstrap instructions -->
+            {{ user_form.hidden_tag() }}
+            <div class="form-group">
+                <fieldset>
+                    {{ user_form.username.label }}
+                    {{ user_form.username(class="form-control", placeholder = "Add User Name")}}
+                </fieldset>
+                <fieldset>
+                    {{ user_form.phone.label }}
+                    {{ user_form.phone(class="form-control", placeholder = "Add phone")}}
+                </fieldset>
+                <fieldset>
+                    {{ user_form.email.label }}
+                    {{ user_form.email(class="form-control", placeholder = "Add Email")}}
+                </fieldset>
+                <fieldset>
+                    {{ user_form.password.label }}
+                    {{ user_form.password(class="form-control", placeholder = "Add Password")}}
+                </fieldset>
+                <fieldset>
+                    {{ user_form.confirm_pass.label }}
+                    {{ user_form.confirm_pass(class="form-control", placeholder = "Confirm your password")}}
+                </fieldset>
+                <!-- adds green button: -->
+                {{ user_form.submit(class = "btn btn-success")}}
+            </div>
+        </form>
+    </div> 
+{% endblock content %}
