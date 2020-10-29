@@ -17,3 +17,8 @@ class UserInfoForm(FlaskForm):
     # equal to 'password' is confirming the users inputed password. lowercase p to equal the name password 2 lines above
     submit = SubmitField()
 # this class funcition will be used in Routes.py where it'll be instantiated.
+
+class LoginForm(FlaskForm):
+    email = StringField('Email', validators = [DataRequired(), Email()])
+    password = PasswordField('Password', validators = [DataRequired()])
+    submit = SubmitField()

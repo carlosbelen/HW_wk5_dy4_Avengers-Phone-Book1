@@ -1,0 +1,21 @@
+<!-- The following template comes from bootstraps and MUST match what's normally used, else issues -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand">Avengers </a>
+    <!-- navigation button will go here -->
+    <div class="collapse navbar-collapse" id="blogNav">
+        <ul>
+            <li class="nav-item active">
+                <!-- url insert for functions in routes for 'home' and 'testRoute' -->
+                <a class="nav-link" href="{{url_for('home') }}">Home</a>
+            </li>
+            <li class="nav-item">
+                <!-- from bootstraps -->
+                <a class="nav-link" href="{{ url_for('register') }}">Register</a>
+            </li>
+            <li class="nav-item">
+                <!-- from bootstraps -->
+                <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+            </li>
+        </ul>
+    </div>
+</nav>

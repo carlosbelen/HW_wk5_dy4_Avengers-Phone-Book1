@@ -1,6 +1,6 @@
 # first model that will go into database.  
 # will use information from flask-sqlachemy Quickstart to get started
-from avengers import app, db
+from avengers import app, db, login_manager
 
 # Import all of the Werkzeug Security methods
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -8,11 +8,22 @@ from werkzeug.security import generate_password_hash, check_password_hash
 #Import for DateTime Module (this comes from python)
 from datetime import datetime
 
+# Import for the Login Manager UserMixin
+from flask_login import UserMixin
+
 # The user class will have
 # An id, username, email
 # password, post
 
-class User(db.Model):
+# Create the current user_manager using the user_loader function
+# Which is decorator (used in this class to send info to the User Model)
+# Specifically to the User's ID
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key = True)
     # each of our usernames have to be unique and it cant be empty:
     username = db.Column(db.String(150), nullable = False, unique=True)
@@ -24,7 +35,7 @@ class User(db.Model):
 
     def __init__(self,username,phone,email,password):
         self.username = username
-        self.phone =phone
+        self.phone = phone
         self.email = email
         # this will start our encryption method:
         self.password = self.set_password(password)
