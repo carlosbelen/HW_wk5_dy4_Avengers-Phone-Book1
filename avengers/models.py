@@ -59,14 +59,12 @@ class User(db.Model, UserMixin):
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    title = db.Column(db.String(100))
-    content = db.Column(db.String(300))
+    phone = db.Column(db.String(15))
     date_created = db.Column(db.DateTime, nullable = False, default = datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
 
-    def __init__(self,title,content,user_id):
-        self.title = title
-        self.content = content
+    def __init__(self,phone,user_id):
+        self.phone = phone
         self.user_id = user_id
 
     def __repr__(self):

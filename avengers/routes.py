@@ -5,7 +5,7 @@ from avengers import app, db
 from flask import render_template,request,redirect,url_for
 
 #Import Our Form(s)
-from avengers.forms import UserInfoForm, LoginForm
+from avengers.forms import UserInfoForm, LoginForm, PostForm
 
 # Import of our Model(s) for the Database
 from avengers.models import User,Post, check_password_hash 
@@ -18,7 +18,9 @@ from flask_login import login_required,login_user,current_user,logout_user
 # routes are the traffic cop telling people where to go
 @app.route('/')
 def home():
-    return render_template('home.html')
+    # The following line is selecting all the information from post and displaying at home page
+    posts = Post.query.all()
+    return render_template('home.html',user_posts = posts)
 
 @app.route('/register', methods = ['GET', 'POST'])
 # GET information then 
@@ -31,14 +33,14 @@ def register():
     if request.method == 'POST' and form.validate():
         #Get Information from the form
         username = form.username.data
-        phone = form.phone
+        phone = form.phone.data
         email = form.email.data
         password = form.password.data
         # print the data to the server that comes form the form 
-        print(username,email,password)
+        print(username,phone,email,password)
 
         # Creation/Init of our User Class (aka Model)  -- INSTANTIATING HERE
-        user = User(username,email,password)
+        user = User(username,phone,email,password)
 
         # Open a connection to the database
         db.session.add(user)
@@ -67,3 +69,61 @@ def login():
             # TODO Redirect User to login route
             return redirect(url_for('login'))
     return render_template('login.html', login_form = form)
+
+# Creation of logout route
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
+
+# Creation of Posts route
+@app.route('/posts', methods = ['GET','POST'])
+@login_required
+def posts():
+    form = PostForm()
+    if request.method == 'POST' and form.validate():
+        phone = form.phone.data
+        user_id = current_user.id
+        post = Post(phone,user_id)
+        
+        db.session.add(post)
+
+        db.session.commit()
+        return redirect(url_for('home'))
+    return render_template('posts.html', post_form = form)
+
+# post detail route to display info about a post
+@app.route('/posts/<int:post_id>')
+@login_required
+def post_detail(post_id):
+    post = Post.query.get_or_404(post_id)
+    return render_template('post_detail.html', post = post)
+
+@app.route('/posts/update/<int:post_id>',methods = ['GET','POST'])
+@login_required
+def post_update(post_id):
+    # get the link (using link:post_id) check the form, once its validated, commit changes, return redirct to home to see changes
+    post = Post.query.get_or_404(post_id)
+    form = PostForm()
+
+    if request.method == 'POST' and form.validate():
+        phone = form.phone.data
+        user_id = current_user.id
+
+        # Update the Database with the new Info
+        post.phone = phone
+        post.user_id = user_id
+
+        # Commit the changes to the database
+        db.session.commit()
+        return redirect(url_for('home'))
+    return render_template('post_update.html', update_form = form)
+
+@app.route('/posts/delete/<int:post_id>',methods = ['GET','POST','DELETE'])
+@login_required
+def post_delete(post_id):
+    post = Post.query.get_or_404(post_id)
+    db.session.delete(post)
+    db.session.commit()
+    return redirect(url_for('home'))

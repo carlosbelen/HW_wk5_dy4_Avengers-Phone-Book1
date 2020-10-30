@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="container">
+        <h1>Add your public contact number</h1>
+        <form method="POST">
+            {{ post_form.hidden_tag() }}
+            <div class="form-group">
+                <fieldset>
+                    {{ post_form.phone.label }}
+                    {{ post_form.phone(class = "form-control", placeholder = "Add a Phone Number") }}
+                </fieldset>
+                {{ post_form.submit(class = "btn btn-success") }}
+            </div>
+        </form>
+    </div>
+
+{% endblock content %}

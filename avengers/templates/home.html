@@ -1,5 +1,22 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Avengers Registry</h1>
+    <header class="banner">
+        <h1 class="header-text">Avengers</h1>
+    </header>
+
+    <h1>Hello there {{ current_user.username }}</h1>
+    <!-- jengo is python based. so everytime we use squigly with percent, it allows us to do some python -->
+    {% if current_user.is_authenticated %}
+        {% for post in user_posts %}
+            <div class="container">
+                <h3>
+                    <a href="{{ url_for('post_detail', post_id = post.id) }}">{{ post.phone }}</a>
+                </h3>
+            </div>
+        {% endfor %}
+    {% else %}
+    <h2>No phone number listed...</h2>
+
+    {% endif %}
 {% endblock content %}

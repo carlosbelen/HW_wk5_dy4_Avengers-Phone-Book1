@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="container">
+        <h2>Which phone number would you like to make public?</h2>
+        <form method="POST">
+            {{ update_form.hidden_tag() }}
+            <div class="form-group">
+                <fieldset>
+                    {{ update_form.phone.label }}
+                    {{ update_form.phone(class="form-control", placeholder = "Update your phone number") }}
+                </fieldset>
+
+                {{ update_form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+    </div>
+{% endblock content %}
